@@ -6,7 +6,7 @@ from Board import Board
 import time
 import numpy as np
 
-def test(solver, trials=100):
+def test(solver, trials=50):
     total_moves = 0
     start = time.time()
     for trial in range(trials):
@@ -38,15 +38,15 @@ def main():
     print "GreedySolver finished in an average of", greedy_moves, \
         "moves and took an average of", greedy_time, "s"
 
-    for d in range(2, 4):
-        exhaustive_moves, exhaustive_time = test(ExhaustiveSolver(d))
-        print "ExhaustiveSolver (" + str(d) + ") finished in an average of", exhaustive_moves, \
-            "moves and took an average of", exhaustive_time, "s"
+    #for d in range(2, 4):
+    #    exhaustive_moves, exhaustive_time = test(ExhaustiveSolver(d))
+    #    print "ExhaustiveSolver (" + str(d) + ") finished in an average of", exhaustive_moves, \
+    #        "moves and took an average of", exhaustive_time, "s"
 
     for d in range(2, 4):
         for survivors in [5, 10, 15]:
             generational_moves, generational_time = test(GenerationalSolver(depth=d, survivors=survivors))
-            print "GenerationalSolver (" + str(d) + " / " + survivors + ") finished in an average of",\
+            print "GenerationalSolver (" + str(d) + " / " + str(survivors) + ") finished in an average of",\
                 generational_moves, "moves and took an average of", generational_time, "s"
 
 if __name__ == "__main__":
