@@ -24,10 +24,10 @@ class GenerationalSolver(Solver):
     def _find_best_result(self, results):
         max = -1
         best = [-1]
-        for key, value in results:
-            if value > max or value == max and len(key) < len(best):
-                best = key
-                max = value
+        for moves, score, table in results:
+            if score > max or score == max and len(moves) < len(best):
+                best = moves
+                max = score
         return best
 
     # board is a board, this isn't modified
@@ -37,24 +37,16 @@ class GenerationalSolver(Solver):
         if max_score in map(lambda x: x[1], choices):
             max = -1
             best = [-1]
-            for key, value in choices:
-                if value > max or value == max and len(key) < len(best):
-                    best = key
-                    max = value
+            for moves, score, table in choices:
+                if score > max or score == max and len(moves) < len(best):
+                    best = moves
+                    max = score
             return best
         else:
             all_choices = []
-            moves = map(lambda x: x[0], choices)
-            for moveset in moves:
-                closest_relative = moveset[:-1]
-                while closest_relative not in self._cache:
-                    closest_relative = closest_relative[:-1]
-                working_table = Board(self._cache[closest_relative])
-                working_moves = moveset[len(closest_relative):]
-                for move in working_moves:
-                    working_table.flood(move)
-                raw_choices = self._solver.choose(working_table, raw=True)
-                qualified_choices = map(lambda x: (moveset + x[0], x[1]), raw_choices.items())
+            for moves, score, table in choices:
+                raw_choices = self._solver.choose(table, raw=True)
+                qualified_choices = map(lambda x: (moves + x[0], x[1][1], x[1][0]), raw_choices.items())
                 all_choices.extend(qualified_choices)
             best = self._find_best_result(all_choices)
             all_choices = filter(lambda x: len(x[0]) <= len(best), all_choices)
@@ -62,5 +54,4 @@ class GenerationalSolver(Solver):
             return self._recursive_choose(best_choices, max_score)
 
     def choose(self, board):
-        self._cache[()] = board
-        return self._recursive_choose([((), -1)], board.max_score)
+        return self._recursive_choose([((), -1, board)], board.max_score)

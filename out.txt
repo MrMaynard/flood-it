@@ -15,6 +15,6 @@ GenerationalSolver (2 / 10) finished in an average of 19.28 moves and took an av
 GenerationalSolver (2 / 15) finished in an average of 18.72 moves and took an average of 2.94198220253 s
 GenerationalSolver (3 / 5) finished in an average of 19.0 moves and took an average of 3.54915035725 s
 
-== Multithreaded driver (5 threads) ==
-RandomSolver finished in an average of 65.71000000000001 moves and took an average of 0.19628638982772828 s
-GreedySolver finished in an average of 22.33 moves and took an average of 0.7333036828041077 s
+== More optimizations ==
+GenerationalSolver (2 / 10) finished in an average of 18.88 moves and took an average of 1.88578691959 s
+

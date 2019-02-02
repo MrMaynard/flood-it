@@ -7,7 +7,8 @@ import time
 import threading
 import numpy as np
 
-def test(solver, trials=100):
+
+def test(solver, trials=10):
     total_moves = 0
     start = time.time()
     for trial in range(trials):
@@ -26,7 +27,8 @@ def test(solver, trials=100):
     average_moves = total_moves / float(trials)
     return average_moves, average_time
 
-def test_multithreaded(solver, trials=100, threads=10):
+
+def test_multithreaded(solver, trials=20, threads=4):
     def _multithreaded_backend(func, args, res):
         res.append(func(*args))
 
@@ -46,12 +48,12 @@ def test_multithreaded(solver, trials=100, threads=10):
 def main():
 
     # random solver
-    random_moves, random_time = test_multithreaded(RandomSolver())
+    random_moves, random_time = test(RandomSolver())
     print "RandomSolver finished in an average of", random_moves, \
         "moves and took an average of", random_time, "s"
 
     # greedy solver
-    greedy_moves, greedy_time = test_multithreaded(GreedySolver())
+    greedy_moves, greedy_time = test(GreedySolver())
     print "GreedySolver finished in an average of", greedy_moves, \
         "moves and took an average of", greedy_time, "s"
 
@@ -60,9 +62,9 @@ def main():
     #    print "ExhaustiveSolver (" + str(d) + ") finished in an average of", exhaustive_moves, \
     #        "moves and took an average of", exhaustive_time, "s"
 
-    for d in range(2, 3):
+    for d in range(2, 4):
         for survivors in [10, 15, 20]:
-            generational_moves, generational_time = test_multithreaded(GenerationalSolver(depth=d, survivors=survivors))
+            generational_moves, generational_time = test(GenerationalSolver(depth=d, survivors=survivors))
             print "GenerationalSolver (" + str(d) + " / " + str(survivors) + ") finished in an average of",\
                 generational_moves, "moves and took an average of", generational_time, "s"
 
