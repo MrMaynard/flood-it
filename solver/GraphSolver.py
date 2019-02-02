@@ -9,8 +9,11 @@ class GraphSolver(Solver):
     def test_flood(self, board, color):
         pass
 
+    def __init__(self, samples=2):
+        self._samples = samples
+
     def clone(self):
-        return GraphSolver()
+        return GraphSolver(self._samples)
 
     _lut = dict()
     def _add_children(self, board, node):
@@ -81,13 +84,17 @@ class GraphSolver(Solver):
         parent = [-1] * row
         dist[0] = 0
         queue = []
-        for i in range(row):
+        rows = range(row)
+        np.random.shuffle(rows)
+        for i in rows:
             queue.append(i)
         while queue:
             u = self.minDistance(dist, queue)
             if u in queue:
                 queue.remove(u)
-            for i in range(col):
+            columns = range(col)
+            np.random.shuffle(columns)
+            for i in columns:
                 if graph[u][i] and i in queue:
                     if dist[u] + graph[u][i] < dist[i]:
                         dist[i] = dist[u] + graph[u][i]
@@ -95,7 +102,7 @@ class GraphSolver(Solver):
         return dist, parent
 
 
-    def choose(self, board):
+    def choose_one(self, board):
             self.V = board._board.shape[0] * board._board.shape[1]
             self._lut = dict()
             self._build_graph(board)
@@ -104,18 +111,57 @@ class GraphSolver(Solver):
             for r in range(self._matrix.shape[0]):
                 matrix_as_list.append(self._matrix[r].tolist())
             distances, steps = self.dijkstra(matrix_as_list)
-            target_node = np.argmax(distances)
-            path = []
-            while target_node != 0:
-                path.append(target_node)
-                target_node = steps[target_node]
-            path.reverse()
-            true_path = map(lambda x: self._reverse_discretize(board, x), path)
-            raw_choices = map(lambda x: board.get(x[0], x[1]), true_path)
-            choices = []
-            last_value = -1
-            for item in raw_choices:
-                if item != last_value:
-                    last_value = item
-                    choices.append(item)
-            return choices
+
+            # take the move that minimizes the most distance (there may be uncaptured paths to each node)
+            # construct all paths
+            paths = []
+            for node in range(len(distances)):
+                target_node = node
+                paths.append([])
+                while target_node != 0:
+                    paths[node].append(target_node)
+                    target_node = steps[target_node]
+            for p in paths:
+                p.reverse()
+            qualified_paths = [map(lambda x: self._reverse_discretize(board, x), p) for p in paths]
+            choice_paths = [map(lambda x: board.get(x[0], x[1]), p) for p in qualified_paths]
+            all_choices = []
+            for path in choice_paths:
+                temp = []
+                last_value = -1
+                for item in path:
+                    if item != last_value:
+                        last_value = item
+                        temp.append(item)
+                all_choices.append(temp)
+            trimmed_choices = [x[1:] if len(x) > 0 and x[0] == board.existing_color() else x for x in all_choices]
+            choices = filter(lambda x: len(x) > 0, trimmed_choices)
+            first_choices = map(lambda x: x[0], choices)
+            choice_counts = np.bincount(first_choices)
+            most_frequent_choice = np.argmax(choice_counts)
+            return [most_frequent_choice]
+
+
+            # fully move to farthest node
+            # target_node = np.argmax(distances)
+            # path = []
+            # while target_node != 0:
+            #     path.append(target_node)
+            #     target_node = steps[target_node]
+            # path.reverse()
+            # true_path = map(lambda x: self._reverse_discretize(board, x), path)
+            # raw_choices = map(lambda x: board.get(x[0], x[1]), true_path)
+            # choices = []
+            # last_value = -1
+            # for item in raw_choices:
+            #     if item != last_value:
+            #         last_value = item
+            #         choices.append(item)
+            # return choices
+    def choose(self, board):
+        votes = []
+        for s in range(self._samples):
+            votes.append(self.choose_one(board)[0])
+        vote_counts = np.bincount(votes)
+        return [np.argmax(vote_counts)]
+

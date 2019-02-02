@@ -9,7 +9,7 @@ import threading
 import numpy as np
 
 
-def test(solver, trials=2):
+def test(solver, trials=50):
     total_moves = 0
     start = time.time()
     for trial in range(trials):
@@ -21,8 +21,8 @@ def test(solver, trials=2):
             for choice in choices:
                 board.flood(choice)
                 moves += 1
-                # print "------------- " + str(choice) + " --------------"
-                # print board._board
+                #print "------------- " + str(choice) + " --------------"
+                #print board._board
         total_moves += moves
     average_time = (time.time() - start) / float(trials)
     average_moves = total_moves / float(trials)
@@ -49,9 +49,10 @@ def test_multithreaded(solver, trials=20, threads=4):
 def main():
 
     # graph solver
-    graph_moves, graph_time = test(GraphSolver())
-    print "GraphSolver finished in an average of", graph_moves, \
-        "moves and took an average of", graph_time, "s"
+    for s in range(10, 12):
+        graph_moves, graph_time = test(GraphSolver(s))
+        print "GraphSolver (" + str(s) + ") finished in an average of", graph_moves, \
+            "moves and took an average of", graph_time, "s"
 
     # # random solver
     # random_moves, random_time = test(RandomSolver())
