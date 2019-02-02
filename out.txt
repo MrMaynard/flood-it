@@ -1,0 +1,8 @@
+/Users/emaynard/Documents/work/cloudera/floodit/venv/bin/python /Users/emaynard/Documents/work/cloudera/floodit/Player.py
+RandomSolver finished in an average of 66.61 moves and took an average of 0.0239140295982 seconds
+GreedySolver finished in an average of 22.72 moves and took an average of 0.0923516583443 seconds
+
+Process finished with exit code 0
+
+
+========optimization pass 1========
