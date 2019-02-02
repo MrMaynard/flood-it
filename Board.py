@@ -34,13 +34,13 @@ class Board(object):
         else:
             new_neighbors = {(x, y)}
         while new_neighbors:
+            shape.update(new_neighbors)
             next_new_neighbors = set()
             for neighbor in new_neighbors:
                 temp = self._get_neighbors(neighbor[0], neighbor[1], value)
                 for result in temp:
                     if result not in shape:
                         next_new_neighbors.add(result)
-            shape.update(new_neighbors)
             new_neighbors = next_new_neighbors
         return shape
 
