@@ -11,6 +11,9 @@ class ExhaustiveSolver(Solver):
     def __init__(self, depth=2):
         self._depth = depth
 
+    def clone(self):
+        return ExhaustiveSolver(self._depth)
+
 
     def clear_cache(self):
         self._cache = dict()

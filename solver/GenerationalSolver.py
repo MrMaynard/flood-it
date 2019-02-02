@@ -10,9 +10,12 @@ class GenerationalSolver(Solver):
     _redundancy_cache = dict()
 
     def __init__(self, depth=3, survivors=5):
+        self._depth = depth
         self._solver = ExhaustiveSolver(depth)
         self._survivors = survivors
 
+    def clone(self):
+        return GenerationalSolver(self._depth, self._survivors)
 
     def clear_cache(self):
         self._cache = dict()

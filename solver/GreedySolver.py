@@ -8,6 +8,9 @@ class GreedySolver(Solver):
     def test_flood(self, board, color):
         pass
 
+    def clone(self):
+        return GreedySolver()
+
     def choose(self, board):
         results = []
         existing_color = board.existing_color()
