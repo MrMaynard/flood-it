@@ -9,7 +9,7 @@ import threading
 import numpy as np
 
 
-def test(solver, trials=100):
+def test(solver, trials=2):
     total_moves = 0
     start = time.time()
     for trial in range(trials):
@@ -17,7 +17,6 @@ def test(solver, trials=100):
         solver.clear_cache()
         moves = 0
         while not board.is_solved():
-            solver = solver.clone() # todo fix state management in graphsolver
             choices = solver.choose(board)
             for choice in choices:
                 board.flood(choice)
