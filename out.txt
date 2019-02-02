@@ -1,8 +1,10 @@
-/Users/emaynard/Documents/work/cloudera/floodit/venv/bin/python /Users/emaynard/Documents/work/cloudera/floodit/Player.py
-RandomSolver finished in an average of 66.61 moves and took an average of 0.0239140295982 seconds
-GreedySolver finished in an average of 22.72 moves and took an average of 0.0923516583443 seconds
+Without boost:
 
-Process finished with exit code 0
+RandomSolver finished in an average of 67.37 moves and took an average of 0.0239573907852 s
+GreedySolver finished in an average of 22.5 moves and took an average of 0.0892314696312 s
+ExhaustiveSolver (2) finished in an average of 21.66 moves and took an average of 0.23083137989 s
+ExhaustiveSolver (3) finished in an average of 21.41 moves and took an average of 0.786954751015 s
+ExhaustiveSolver (4) finished in an average of 21.28 moves and took an average of 3.04597296953 s
 
+== Generational Solver Update ==
 
-========optimization pass 1========

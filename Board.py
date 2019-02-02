@@ -12,6 +12,7 @@ class Board(object):
             self._board = np.random.randint(low, high + 1, size=shape)
             self.low = low
             self.high = high
+        self.max_score = shape[0] * shape[1]
 
     def _get_neighbors(self, x, y, value):
         results = []

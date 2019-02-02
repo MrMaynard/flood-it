@@ -14,8 +14,8 @@ class GreedySolver(Solver):
         for option in range(board.low, board.high + 1):
             if option != existing_color:
                 clone = Board(board)  # todo implement test flood without cloning the whole thing
-                flood_shape = clone.flood(option, 0, 0)
-                results.append(len(clone.get_shape(clone.existing_color(), boost=flood_shape)))
+                clone.flood(option)
+                results.append(len(clone.get_shape(clone.existing_color())))
             else:
                 results.append(-1)
         return [np.argmax(results) + board.low]

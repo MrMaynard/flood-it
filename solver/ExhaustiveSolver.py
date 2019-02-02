@@ -1,12 +1,10 @@
 import numpy as np
 from Board import Board
-from GreedySolver import GreedySolver
 from Solver import Solver
 
 
 class ExhaustiveSolver(Solver):
 
-    _solver = GreedySolver()
     _cache = dict()
     _redundancy_cache = dict()
 
@@ -18,7 +16,7 @@ class ExhaustiveSolver(Solver):
         self._cache = dict()
         self._redundancy_cache = dict()
 
-    def choose(self, board):
+    def choose(self, board, raw=False):
 
         if self._depth == 1:
             return self._solver.choose(board)
@@ -47,8 +45,17 @@ class ExhaustiveSolver(Solver):
             working_moves = combination[len(closest_relative):]
             for move in working_moves:
                 working_table.flood(move)
-            if(len(combination) < self._depth):
+            if len(combination) < self._depth:
                 self._cache[combination] = working_table
             results[combination] = len(working_table.get_shape(working_table.existing_color()))
 
-        return max(results.iterkeys(), key=(lambda key: results[key]))
+        if raw:
+            return results
+        else:
+            max = -1
+            best = [-1]
+            for key, value in results.iteritems():
+                if value > max or value == max and len(key) < len(best):
+                    best = key
+                    max = value
+            return best
